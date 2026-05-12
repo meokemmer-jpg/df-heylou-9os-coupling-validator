@@ -1,0 +1,112 @@
+# DF-HeyLou-9OS-Coupling-Validator Configuration [CRUX-MK]
+df_id: DF-HEYLOU-9OS-COUPLING-VALIDATOR
+df_name: heylou-9os-coupling-validator
+version: 0.1.0-SKELETON
+status: PRE-PRODUCTION-CONDITIONAL
+crux-mk: true
+
+k0_touch: true  # K_0-CRITICAL: Profit-Garantie + Refund-Mechanik
+k0_caveats:
+  - "Profit-Garantie-Refund-Liability (Hotelier-Anspruch)"
+  - "Cross-DF-Health (HeyLou + 9OS-NEXT) Status-Mismatch"
+  - "Anti-OTA-Strategie-Auswirkung auf Revenue-Calculation"
+phronesis_required: true
+sandbox_default: true
+
+description: |
+  Profit-Garantie wenn HeyLou + 9OS-NEXT zusammen aktiviert.
+  Profit = Direct-Revenue + Anti-OTA-Savings - 9OS-Cost.
+  Refund-Mechanik bei Garantie-Verfehlung nach 90 Tagen.
+
+tier_2_check:
+  lambda_per_month_estimate: 100  # Daily health-check per coupled-hotel
+  narrow_scope: "Coupling-Health + Profit-Calc + Guarantee-Check + Refund-Trigger"
+  determinism: 0.95
+  rollback_seconds: 60
+  test_coverage_target: 0.90
+  k0_protected: false  # K_0-CRITICAL
+  q0_measurable: true
+  escalation_after_n_fails: 2  # K_0-strenger
+  rho_budget_eur_day: 0
+  audit_trail: branch-hub/audit/df-heylou-9os-coupling.jsonl
+
+k11_cascade_containment:
+  cascade_isolation: hard
+  failure_blast_radius: 0
+  dependency_dlq_strategy: "Per-Hotel coupling-state DLQ"
+
+k12_distillation_resistenz:
+  output_feeds_into_training: false
+  provenance_required_in_output: true
+  non_llm_validation_layer: deterministic-profit-arithmetic
+  pii_scrubbing_enabled: true
+
+k13_independent_ground_truth:
+  external_anchor_type: financial_market_data  # Stripe + DF-Cost-Tracker
+  external_anchor_validation_frequency: "daily per coupled-hotel"
+  pre_action_domain_check:
+    env_tag: "dev/staging/prod"
+    mount_point: "branch-hub Path"
+    network_region: "n/a (local + DF-aggregation)"
+  pre_action_backup_check:
+    backup_status: "previous profit-snapshots persistent"
+    replication_lag: "n/a"
+  pre_action_blast_radius_check:
+    blast_radius: "1 coupled-hotel pro Update"
+    reversibility_class: "state-only (snapshots append-only; refund-trigger requires PHRONESIS)"
+
+k14_human_override_decay:
+  override_complexity: multi_step  # K_0-strenger
+  override_documentation_freshness_days: 14
+  martin_review_cadence: "weekly Profit-Snapshot-Review"
+  bus_factor_handover_drilled: false
+
+k15_entropy_budget:
+  entropy_added_loc_estimate: 850
+  entropy_added_concepts:
+    - CouplingState
+    - ProfitSnapshot
+    - GuaranteeCheck
+    - RefundTrigger
+  entropy_justified_by_rho: "+EUR 50-150k/J durch Coupling-Garantie-Trust"
+  entropy_subtractive_potential: "Ersetzt manuelle Hotelier-Profit-Reviews"
+
+k16_concurrent_spawn_mutex:
+  concurrent_spawn_protection: both
+  lock_dir: /tmp/df-heylou-9os-coupling.lock
+  lock_stale_age_h: 6
+  engine_pgrep_check: true
+  lock_release_on: EXIT_INT_TERM
+
+lose_coupling:
+  LC1_graceful_degradation:
+    degradation_modes:
+      - full
+      - degraded_revenue   # ohne Direct-Booking-Engine-Daten
+      - degraded_9os       # ohne 9OS-Health-Status
+      - standalone         # nur statische Profit-Schaetzung
+    degradation_test_required: true
+  LC2_direct_mode:
+    direct_mode_available: true
+    direct_mode_capability: 0.40
+    direct_mode_trigger: "Cross-DF unreachable >30s"
+  LC3_circuit_breaker:
+    circuit_breaker_timeout_s: 30
+    circuit_breaker_open_threshold: 2  # K_0-strenger
+    circuit_breaker_half_open_test_interval_s: 600
+  LC4_failure_isolation:
+    state_externalization: true
+    idempotent_operations: true
+    dependency_dlq_separate: true
+  LC5_health_check:
+    health_check_dependencies: []
+    health_check_degraded_score: 0.5
+    health_check_endpoint_or_file: "branch-hub/state/df-heylou-9os-coupling-health.json"
+
+env_vars:
+  DF_HEYLOU_9OS_COUPLING_REAL_ENABLED:
+    default: false
+  PHRONESIS_TICKET:
+    required_for_refund: true
+
+[CRUX-MK]
