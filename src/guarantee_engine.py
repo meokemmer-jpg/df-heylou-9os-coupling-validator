@@ -1,20 +1,3 @@
-
-# K16-Trinity-AGGRESSIVE 2026-05-17
-def k16_lock(name):
-    import fcntl, os
-    fd = os.open(f'/tmp/df-aggr-{name}.lock', os.O_CREAT|os.O_WRONLY)
-    fcntl.flock(fd, fcntl.LOCK_EX|fcntl.LOCK_NB)
-    return fd
-
-# K13-Trinity-AGGRESSIVE 2026-05-17
-def k13_anchor(h):
-    from datetime import datetime, timezone
-    return {'t': 'rfc3161-mock', 'ts': datetime.now(timezone.utc).isoformat(), 'h': h}
-
-# K12-Trinity-AGGRESSIVE 2026-05-17
-def k12_provenance(p, k=b'df-aggr'):
-    import hashlib, hmac
-    return {'h': hashlib.sha256(p).hexdigest(), 'm': hmac.new(k,p,hashlib.sha256).hexdigest()}
 """Guarantee-Engine [CRUX-MK].
 
 Profit-Garantie-Logic + Refund-Mechanik.
@@ -34,6 +17,24 @@ from __future__ import annotations
 import os
 import time
 from dataclasses import dataclass
+
+
+# W53 Fix: Trinity-helpers moved AFTER __future__ import (was prepended above docstring causing SyntaxError)
+def k16_lock(name):
+    import fcntl, os as _os
+    fd = _os.open(f'/tmp/df-aggr-{name}.lock', _os.O_CREAT | _os.O_WRONLY)
+    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    return fd
+
+
+def k13_anchor(h):
+    from datetime import datetime, timezone
+    return {'t': 'rfc3161-mock', 'ts': datetime.now(timezone.utc).isoformat(), 'h': h}
+
+
+def k12_provenance(p, k=b'df-aggr'):
+    import hashlib, hmac
+    return {'h': hashlib.sha256(p).hexdigest(), 'm': hmac.new(k, p, hashlib.sha256).hexdigest()}
 
 
 @dataclass
