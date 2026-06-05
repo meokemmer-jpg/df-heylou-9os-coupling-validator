@@ -1,0 +1,8 @@
+{
+  "df": "df-heylou-9os-coupling-validator",
+  "ts": "2026-06-05T08:23:43.093779+00:00",
+  "ok": true,
+  "bytes": 3188,
+  "model": "phi3.5:3.8b",
+  "duration_s": 6.3
+}
