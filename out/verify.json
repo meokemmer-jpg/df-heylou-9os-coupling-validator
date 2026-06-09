@@ -1,0 +1,12 @@
+{
+  "df": "df-heylou-9os-coupling-validator",
+  "ts": "2026-06-08T19:53:48.756068+00:00",
+  "has_src": true,
+  "parse_ok": true,
+  "has_tests": true,
+  "test_ran": true,
+  "tests_passed": true,
+  "code_hash": "669caa9af65c59a5",
+  "python": "3.14.4",
+  "crux": "[CRUX-MK]"
+}
