@@ -1,9 +1,9 @@
 {
   "df": "df-heylou-9os-coupling-validator",
-  "ts": "2026-06-09T00:24:14.120129+00:00",
+  "ts": "2026-06-09T17:03:19.471936+00:00",
   "ok": true,
-  "bytes": 685,
+  "bytes": 6763,
   "model": "kemmer-14b-ctx8k",
   "mode": "produce",
-  "duration_s": 10.1
+  "duration_s": 57.3
 }
