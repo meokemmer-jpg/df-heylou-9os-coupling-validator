@@ -1,0 +1,5 @@
+{
+  "verdict": "HOLDS",
+  "reason": "Der Test ruft reale Komponenten mit Gegenfaellen auf, z.B. healthy/degraded/not_coupled, negative Profit-Inputs und guarantee_met vs refund_eligible, sodass unterschiedliche Inputs unterschiedliche Outputs erzwingen.",
+  "ts": "2026-07-09T03:10:57.102263+00:00"
+}
